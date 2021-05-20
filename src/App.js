@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { Suspense } from "react"
+import "./App.css"
+import "primereact/resources/themes/saga-blue/theme.css"
+import "primereact/resources/primereact.min.css"
+import "primeicons/primeicons.css"
+import "primeflex/primeflex.css"
+import { BrowserRouter as Router, Switch } from "react-router-dom"
+import routes from "./utils/routes.js"
+import { AuthProvider } from "./context/auth"
+import AppRoute from "./components/AppRoute"
+import { Spinner } from "./components/Spinner"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+  return (<>
+    <AuthProvider>
+      <Router>
+        <Suspense fallback={<Spinner />}>
+          <Switch>
+            {routes.map((route) => (
+              <AppRoute
+                exact
+                key={route.path}
+                path={route.path}
+                component={route.component}
+                isPrivate={route.isPrivate}
+              />
+            ))}
+          </Switch>
+        </Suspense>
+      </Router>
+    </AuthProvider>
+  </>)
 }
 
-export default App;
+export default App
