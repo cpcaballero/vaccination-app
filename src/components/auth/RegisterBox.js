@@ -313,7 +313,7 @@ const RegisterBox = ({ history }) => {
                 className="p-mx-2 p-button-outlined p-button-secondary"
                 onClick={() => setActiveIndex(1)}
               />
-              <Button label="Submit" className="p-mx-2 p-button-primary" />
+              <Button label="Submit" className="p-mx-2 p-button-primary" onClick={ () => console.log("submit")} />
             </div>
           </div>
         )}
