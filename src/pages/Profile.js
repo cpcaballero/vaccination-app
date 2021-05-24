@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from "react"
-import { Card } from "primereact/card"
+import React, { useState } from "react"
+import { Button } from "primereact/button"
+// import { Divider } from "primereact/divider"
+import { Fieldset } from "primereact/fieldset"
 import { Calendar } from "primereact/calendar"
 import { InputText } from "primereact/inputtext"
-import { Button } from "primereact/button"
-import { Divider } from "primereact/divider"
-import { Steps } from "primereact/steps"
 import { Dropdown } from "primereact/dropdown"
-import { Checkbox } from "primereact/checkbox"
+// import { Checkbox } from "primereact/checkbox"
 
-const RegisterBox = ({ history }) => {
-  const items = [
-    { label: "Basic" },
-    { label: "Personal" },
-    { label: "Address" },
-  ]
-
+const Profile = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
@@ -52,12 +45,6 @@ const RegisterBox = ({ history }) => {
     termsAgree,
     covidClassification
   } = formData
-
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-
-  const [activeIndex, setActiveIndex] = useState(0)
-
   let sexOptions = [
     { label: "MALE", value: "M" },
     { label: "FEMALE", value: "F" },
@@ -122,74 +109,61 @@ const RegisterBox = ({ history }) => {
     },
   ]
 
-  useEffect(() => {
-    console.log(activeIndex)
-  }, [activeIndex])
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value })
 
   return (
     <>
-      <Card
-        title="Patient Registration"
-        className="p-col-12 p-lg-offset-4 p-lg-4"
-      >
-        <Steps
-          model={items}
-          activeIndex={activeIndex}
-          onSelect={(e) => setActiveIndex(e.index)}
-          readOnly={false}
-          className="p-mb-5"
-        />
-        {activeIndex === 0 && (
+      <div className=" p-lg-6 p-lg-offset-3">
+        <h2>My Profile</h2>
+        <Fieldset legend="Basic">
           <div className="p-fluid p-grid">
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="inputtext" />
+                <InputText disabled id="inputtext" value="Carlos" />
                 <label htmlFor="inputtext">First Name</label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="inputtext" />
+                <InputText disabled id="inputtext" value="Pelimer" />
                 <label htmlFor="inputtext">Middle Name</label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="inputtext" />
+                <InputText disabled id="inputtext" value="Caballero" />
                 <label htmlFor="inputtext">Last Name</label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="inputtext" />
+                <InputText
+                  disabled
+                  id="inputtext"
+                  value="carlospcaballero@outlook.com"
+                />
                 <label htmlFor="inputtext">Email</label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="inputtext" />
+                <InputText disabled id="inputtext" value="09175402233" />
                 <label htmlFor="inputtext">Mobile Number</label>
               </span>
             </div>
-            <div className="p-col-12">
-              <Button
-                label="Next"
-                className="p-button-primary"
-                onClick={() => setActiveIndex(1)}
-              />
-            </div>
           </div>
-        )}
-
-        {activeIndex === 1 && (
+        </Fieldset>
+        <Fieldset className="p-mt-3" legend="Personal">
           <div className="p-fluid p-grid">
             <div className="p-field p-col-12 p-d-none p-d-md-block">
               <span className="p-float-label">
                 <Calendar
+                  disabled
                   id="birthDate"
                   name="birthDate"
-                  value={birthDate}
-                  onChange={(e) => onChange(e)}
+                  value={new Date("1992/02/20")}
+                  // onChange={(e) => onChange(e)}
                   monthNavigator
                   yearNavigator
                   showIcon
@@ -203,10 +177,11 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12 p-d-md-none">
               <span className="p-float-label">
                 <Calendar
+                  disabled
                   id="birthDate"
                   name="birthDate"
-                  value={birthDate}
-                  onChange={(e) => onChange(e)}
+                  value={ new Date("1992/02/20")}
+                  // onChange={(e) => onChange(e)}
                   monthNavigator
                   yearNavigator
                   showIcon
@@ -221,9 +196,10 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
+                  disabled
                   id="sex"
                   name="sex"
-                  value={sex}
+                  value="M"
                   options={sexOptions}
                   onChange={onChange}
                   optionLabel="label"
@@ -235,11 +211,11 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
+                  disabled
                   id="civilStatus"
                   name="civilStatus"
-                  value={civilStatus}
+                  value="SINGLE"
                   options={civilStatusOptions}
-                  onChange={onChange}
                   optionLabel="label"
                   optionValue="value"
                 />
@@ -249,48 +225,42 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
+                  disabled
                   id="covidClassification"
                   name="covidClassification"
-                  value={covidClassification}
+                  value="A3. Adult with Comorbidity"
                   options={covidClassificationOptions}
-                  onChange={onChange}
                   optionLabel="label"
                   optionValue="value"
                 />
-                <label htmlFor="covidClassification">COVID-19 Classification</label>
+                <label htmlFor="covidClassification">
+                  COVID-19 Classification
+                </label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <h5>Emergency Contact:</h5>
               <span className="p-float-label p-mt-5">
-                <InputText id="emergencyPerson" name="emergencyPerson" />
+                <InputText
+                  disabled
+                  id="emergencyPerson"
+                  name="emergencyPerson"
+                  value="Angelita Pelimer"
+                />
                 <label htmlFor="emergencyPerson">Contact Person</label>
               </span>
               <span className="p-float-label p-mt-5">
-                <InputText id="emergencyContact" />
+                <InputText disabled id="emergencyContact" value="09163870258" />
                 <label htmlFor="emergencyContact">Contact Number</label>
               </span>
             </div>
-            <div className="p-col-12 p-d-flex p-flex-row p-jc-between">
-              <Button
-                label="Back"
-                className="p-mx-2 p-button-outlined p-button-secondary"
-                onClick={() => setActiveIndex(0)}
-              />
-              <Button
-                label="Next"
-                className="p-mx-2 p-button-primary"
-                onClick={() => setActiveIndex(2)}
-              />
-            </div>
           </div>
-        )}
-
-        {activeIndex === 2 && (
+        </Fieldset>
+        <Fieldset legend="Address">
           <div className="p-fluid p-grid">
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="houseBldgStreet" />
+                <InputText id="houseBldgStreet" value="#35 Don Julio Gregorio St." disabled />
                 <label htmlFor="houseBldgStreet">
                   House # / Building / Street
                 </label>
@@ -300,9 +270,10 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
+                  disabled
                   id="country"
                   name="country"
-                  value={country}
+                  value="PHILIPPINES"
                   options={countryOptions}
                   onChange={onChange}
                   optionLabel="label"
@@ -314,9 +285,10 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
+                  disabled
                   id="provinceState"
                   name="provinceState"
-                  value={provinceState}
+                  value="METRO MANILA"
                   options={provinceOptions}
                   onChange={onChange}
                   optionLabel="label"
@@ -328,9 +300,10 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
+                  disabled
                   id="city"
                   name="city"
-                  value={city}
+                  value="QUEZON CITY"
                   options={cityOptions}
                   onChange={onChange}
                   optionLabel="label"
@@ -342,9 +315,10 @@ const RegisterBox = ({ history }) => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
+                  disabled
                   id="barangay"
                   name="barangay"
-                  value={barangay}
+                  value="SAUYO"
                   options={barangayOptions}
                   onChange={onChange}
                   optionLabel="label"
@@ -353,48 +327,12 @@ const RegisterBox = ({ history }) => {
                 <label htmlFor="barangay">Barangay</label>
               </span>
             </div>
-            <div className="p-field p-col-12">
-              <div className="p-field-checkbox">
-                <Checkbox
-                  inputId="termsAgree"
-                  name="termsAgree"
-                  checked={termsAgree}
-                  onChange={() =>
-                    setFormData({ ...formData, termsAgree: !termsAgree })
-                  }
-                />
-                <label htmlFor="termsAgree">
-                  Click the checkbox to agree to our Terms &amp; Conditions
-                </label>
-              </div>
-            </div>
-            <div className="p-col-12 p-d-flex p-flex-row p-jc-between">
-              <Button
-                label="Back"
-                className="p-mx-2 p-button-outlined p-button-secondary"
-                onClick={() => setActiveIndex(1)}
-              />
-              <Button
-                label="Submit"
-                className="p-mx-2 p-button-primary"
-                onClick={() => console.log("submit")}
-              />
-            </div>
           </div>
-        )}
-
-        <Divider />
-        <div className="p-d-flex p-jc-center p-flex-column">
-          <h3 className="p-text-center">Already have an account?</h3>
-          <Button
-            label="Click here to Login"
-            className="p-button-link"
-            onClick={() => history.push("/login")}
-          />
-        </div>
-      </Card>
+        </Fieldset>
+        <Fieldset legend="Medical"></Fieldset>
+      </div>
     </>
   )
 }
 
-export default RegisterBox
+export default Profile

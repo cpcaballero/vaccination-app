@@ -7,7 +7,7 @@ const Landing = ({ match, history }) => {
   const userDetails = useAuthState()
 
   if (userDetails.token) {
-    return <Redirect to={{ pathname: "/dashboard" }} />
+    return <Redirect to={{ pathname: "/dashboard/profile" }} />
   }
 
   return (

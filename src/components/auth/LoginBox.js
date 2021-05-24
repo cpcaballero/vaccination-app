@@ -34,7 +34,7 @@ const LoginBox = ({ history }) => {
         return
       }
       console.log(loading)
-      history.push("/dashboard")
+      history.push("/dashboard/profile")
     } catch (error) {
       console.log(error)
     }

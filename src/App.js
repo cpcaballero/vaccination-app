@@ -21,6 +21,7 @@ const App = () => {
                 exact
                 key={route.path}
                 path={route.path}
+                content={route.content}
                 component={route.component}
                 isPrivate={route.isPrivate}
               />

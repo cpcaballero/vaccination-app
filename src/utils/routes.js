@@ -1,7 +1,7 @@
 import {lazy} from 'react'
 const Landing = lazy(() => import("../pages/login/Landing"))
-const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"))
-
+const MainComponent = lazy( () => import("../components/MainComponent"))
+const Profile = lazy( () => import('../pages/Profile'))
 const routes = [
   {
     path: "/login",
@@ -14,8 +14,9 @@ const routes = [
     isPrivate: false,
   },
   {
-    path: "/dashboard",
-    component: Dashboard,
+    path: "/dashboard/profile",
+    component: MainComponent,
+    content: Profile,
     isPrivate: true,
   },
 ]
