@@ -1,4 +1,5 @@
 import React from "react"
+import { QRCode } from "qrcode.react"
 import { Button } from "primereact/button"
 import {
   loginUser,
@@ -13,6 +14,7 @@ const MainNavbar = ({
   toggleSidebarVisible,
   history,
   navLinks,
+  setQRCodeVisible
 }) => {
   const { loading, errorMessage } = useAuthState()
   const dispatch = useAuthDispatch()
@@ -48,14 +50,21 @@ const MainNavbar = ({
                   ? "p-button-primary"
                   : "p-button-text p-button-plain"
               }`}
+              onClick={() => history.push(item.path)}
             />
           ))}
         </div>
       </div>
       <div className="p-d-flex p-jc-end">
         <Button
+          label="View QR Code"
+          icon="pi pi-th-large"
+          className="p-button-text p-button-plain p-button-success p-button-lg p-d-none p-d-lg-flex"
+          onClick={ () => setQRCodeVisible(true)}
+        />
+        <Button
           label="Log out"
-          className="p-button-text p-button-plain p-button-lg"
+          className="p-button-text p-button-plain"
           onClick={() => logoutAccount()}
         />
       </div>

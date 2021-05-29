@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import MainNavbar from "./MainNavbar"
 import MainSidebar from "./MainSidebar"
 
-const FullNavbar = ({ history }) => {
+const FullNavbar = ({ history, setQRCodeVisible }) => {
   const [sideBarVisible, toggleSidebarVisible] = useState(false)
   let navLinks = [
     {
@@ -25,12 +25,14 @@ const FullNavbar = ({ history }) => {
         toggleSidebarVisible={toggleSidebarVisible}
         navLinks={navLinks}
         history={history}
+        setQRCodeVisible={setQRCodeVisible}
       />
       <MainSidebar
         sideBarVisible={sideBarVisible}
         toggleSidebarVisible={toggleSidebarVisible}
         navLinks={navLinks}
         history={history}
+        setQRCodeVisible={setQRCodeVisible}
       />
     </>
   )

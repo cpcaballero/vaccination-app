@@ -8,6 +8,7 @@ import { Dropdown } from "primereact/dropdown"
 // import { Checkbox } from "primereact/checkbox"
 
 const Profile = () => {
+  const [editMode, setEditMode] = useState(false)
   const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
@@ -24,7 +25,7 @@ const Profile = () => {
     city: "",
     barangay: "",
     termsAgree: false,
-    covidClassification: ""
+    covidClassification: "",
   })
 
   const {
@@ -43,7 +44,7 @@ const Profile = () => {
     city,
     barangay,
     termsAgree,
-    covidClassification
+    covidClassification,
   } = formData
   let sexOptions = [
     { label: "MALE", value: "M" },
@@ -115,31 +116,51 @@ const Profile = () => {
   return (
     <>
       <div className=" p-lg-6 p-lg-offset-3">
-        <h2>My Profile</h2>
-        <Fieldset legend="Basic">
-          <div className="p-fluid p-grid">
+        <h2>
+          My Profile{" "}
+          <Button
+            label={editMode ? "Update" : "Edit"}
+            icon={editMode ? "pi pi-save" : "pi pi-pencil"}
+            className={`p-ml-3 p-button-sm ${
+              editMode
+                ? "p-button-primary"
+                : "p-button-secondary p-button-outlined"
+            }`}
+            onClick={() => setEditMode(!editMode)}
+          />
+        </h2>
+        <Fieldset className="p-mt-3" legend="Basic">
+          <div className="p-fluid p-grid p-mt-3">
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText disabled id="inputtext" value="Carlos" />
+                <InputText disabled={!editMode} id="inputtext" value="Juan Miguel" />
                 <label htmlFor="inputtext">First Name</label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText disabled id="inputtext" value="Pelimer" />
+                <InputText
+                  disabled={!editMode}
+                  id="inputtext"
+                  value="Marquez"
+                />
                 <label htmlFor="inputtext">Middle Name</label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText disabled id="inputtext" value="Caballero" />
+                <InputText
+                  disabled={!editMode}
+                  id="inputtext"
+                  value="Barera"
+                />
                 <label htmlFor="inputtext">Last Name</label>
               </span>
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <InputText
-                  disabled
+                  disabled={!editMode}
                   id="inputtext"
                   value="carlospcaballero@outlook.com"
                 />
@@ -148,18 +169,22 @@ const Profile = () => {
             </div>
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText disabled id="inputtext" value="09175402233" />
+                <InputText
+                  disabled={!editMode}
+                  id="inputtext"
+                  value="09175402233"
+                />
                 <label htmlFor="inputtext">Mobile Number</label>
               </span>
             </div>
           </div>
         </Fieldset>
         <Fieldset className="p-mt-3" legend="Personal">
-          <div className="p-fluid p-grid">
+          <div className="p-fluid p-grid p-mt-3">
             <div className="p-field p-col-12 p-d-none p-d-md-block">
               <span className="p-float-label">
                 <Calendar
-                  disabled
+                  disabled={!editMode}
                   id="birthDate"
                   name="birthDate"
                   value={new Date("1992/02/20")}
@@ -177,10 +202,10 @@ const Profile = () => {
             <div className="p-field p-col-12 p-d-md-none">
               <span className="p-float-label">
                 <Calendar
-                  disabled
+                  disabled={!editMode}
                   id="birthDate"
                   name="birthDate"
-                  value={ new Date("1992/02/20")}
+                  value={new Date("1992/02/20")}
                   // onChange={(e) => onChange(e)}
                   monthNavigator
                   yearNavigator
@@ -196,7 +221,7 @@ const Profile = () => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
-                  disabled
+                  disabled={!editMode}
                   id="sex"
                   name="sex"
                   value="M"
@@ -211,7 +236,7 @@ const Profile = () => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
-                  disabled
+                  disabled={!editMode}
                   id="civilStatus"
                   name="civilStatus"
                   value="SINGLE"
@@ -225,7 +250,7 @@ const Profile = () => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
-                  disabled
+                  disabled={!editMode}
                   id="covidClassification"
                   name="covidClassification"
                   value="A3. Adult with Comorbidity"
@@ -242,7 +267,7 @@ const Profile = () => {
               <h5>Emergency Contact:</h5>
               <span className="p-float-label p-mt-5">
                 <InputText
-                  disabled
+                  disabled={!editMode}
                   id="emergencyPerson"
                   name="emergencyPerson"
                   value="Angelita Pelimer"
@@ -250,17 +275,25 @@ const Profile = () => {
                 <label htmlFor="emergencyPerson">Contact Person</label>
               </span>
               <span className="p-float-label p-mt-5">
-                <InputText disabled id="emergencyContact" value="09163870258" />
+                <InputText
+                  disabled={!editMode}
+                  id="emergencyContact"
+                  value="09163870258"
+                />
                 <label htmlFor="emergencyContact">Contact Number</label>
               </span>
             </div>
           </div>
         </Fieldset>
-        <Fieldset legend="Address">
-          <div className="p-fluid p-grid">
+        <Fieldset className="p-mt-3" legend="Address">
+          <div className="p-fluid p-grid p-mt-3">
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="houseBldgStreet" value="#35 Don Julio Gregorio St." disabled />
+                <InputText
+                  id="houseBldgStreet"
+                  value="#35 Don Julio Gregorio St."
+                  disabled={!editMode}
+                />
                 <label htmlFor="houseBldgStreet">
                   House # / Building / Street
                 </label>
@@ -270,7 +303,7 @@ const Profile = () => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
-                  disabled
+                  disabled={!editMode}
                   id="country"
                   name="country"
                   value="PHILIPPINES"
@@ -285,7 +318,7 @@ const Profile = () => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
-                  disabled
+                  disabled={!editMode}
                   id="provinceState"
                   name="provinceState"
                   value="METRO MANILA"
@@ -300,7 +333,7 @@ const Profile = () => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
-                  disabled
+                  disabled={!editMode}
                   id="city"
                   name="city"
                   value="QUEZON CITY"
@@ -315,7 +348,7 @@ const Profile = () => {
             <div className="p-field p-col-12">
               <span className="p-float-label">
                 <Dropdown
-                  disabled
+                  disabled={!editMode}
                   id="barangay"
                   name="barangay"
                   value="SAUYO"
@@ -329,7 +362,38 @@ const Profile = () => {
             </div>
           </div>
         </Fieldset>
-        <Fieldset legend="Medical"></Fieldset>
+        <Fieldset className="p-mt-3" legend="Medical">
+          <div className="p-fluid p-grid p-mt-3">
+            <div className="p-field p-col">
+              <div className="p-inputgroup">
+                <span className="p-float-label">
+                  <InputText disabled={!editMode} id="inputtext" value="90" />
+                  <span className="p-inputgroup-addon">kg</span>
+                  <label htmlFor="inputtext">Weight (kg)</label>
+                </span>
+              </div>
+            </div>
+            <div className="p-field p-col">
+              <div className="p-inputgroup">
+                <span className="p-float-label">
+                  <InputText disabled={!editMode} id="inputtext" value="175" />
+                  <span className="p-inputgroup-addon">cm</span>
+                  <label htmlFor="inputtext">Height (cm)</label>
+                </span>
+              </div>
+            </div>
+          </div>
+        </Fieldset>
+        {editMode && (
+          <div className="p-d-flex p-flex-column p-ai-stretch">
+            <Button
+              label="Update"
+              icon="pi pi-save"
+              className="p-my-3 p-button-lg p-button-primary"
+              onClick={() => setEditMode(!editMode)}
+            />
+          </div>
+        )}
       </div>
     </>
   )
