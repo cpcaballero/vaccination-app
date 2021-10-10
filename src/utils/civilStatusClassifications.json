@@ -1,0 +1,6 @@
+[
+  { "label": "SINGLE", "value": "SINGLE" },
+  { "label": "MARRIED", "value": "MARRIED" },
+  { "label": "WIDOW(ER)", "value": "WIDOW(ER)" },
+  { "label": "LEGALLY SEPARATED", "value": "LEGALLY SEPARATED" }
+]

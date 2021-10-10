@@ -4,6 +4,8 @@ const MainComponent = lazy( () => import("../components/MainComponent"))
 const Profile = lazy( () => import('../pages/Profile'))
 const Schedules = lazy( () => import('../pages/Schedules'))
 const Booking = lazy( () => import('../pages/Booking'))
+const Dependents = lazy( () => import('../pages/Dependents'))
+const Files =  lazy( () => import('../pages/Files'))
 const routes = [
   {
     path: "/login",
@@ -19,19 +21,36 @@ const routes = [
     path: "/dashboard/profile",
     component: MainComponent,
     content: Profile,
-    isPrivate: true,
+    isPrivate: true
+    
   },
   {
     path: "/dashboard/schedules",
     component: MainComponent,
     content: Schedules,
-    isPrivate: true,
+    isPrivate: true
+    
   },
   {
     path: "/dashboard/schedules/book",
     component: MainComponent,
     content: Booking,
-    isPrivate: true,
+    isPrivate: true
+    
+  },
+  {
+    path: "/dashboard/dependents",
+    component: MainComponent,
+    content: Dependents,
+    isPrivate: true
+    
+  },
+  {
+    path: "/dashboard/files",
+    component: MainComponent,
+    content: Files,
+    isPrivate: true
+    
   },
 
 ]

@@ -1,0 +1,50 @@
+[
+  {
+    "label": "A1. HEALTH CARE WORKERS",
+    "value": "A1. HEALTH CARE WORKERS"
+  },
+  { 
+    "label": "A2. SENIOR CITIZENS", 
+    "value": "A2. SENIOR CITIZENS"
+  },
+  {
+    "label": "A3. ADULT WITH COMORBIDITY",
+    "value": "A3. ADULT WITH COMORBIDITY"
+  },
+  {
+    "label": "A4. FRONTLINE PERSONNEL IN ESSENTIAL SECTOR",
+    "value": "A4. FRONTLINE PERSONNEL IN ESSENTIAL SECTOR"
+  },
+  { 
+    "label": "A5. POOR POPULATION", 
+    "value": "A5. POOR POPULATION" 
+  },
+  {
+    "label": "B1. TEACHERS AND SOCIAL WORKERS",
+    "value": "B1. TEACHERS AND SOCIAL WORKERS"
+  },
+  {
+    "label": "B2. OTHER GOVERNMENT WORKERS",
+    "value": "B2. OTHER GOVERNMENT WORKERS"
+  },
+  {
+    "label": "B3. OTHER ESSENTIAL WORKERS",
+    "value": "B3. OTHER ESSENTIAL WORKERS"
+  },
+  {
+    "label": "B4. SOCIO-DEMOGRAPHIC GROUPS",
+    "value": "B4. SOCIO-DEMOGRAPHIC GROUPS"
+  },
+  {
+    "label": "B5. OVERSEAS FILIPINO WORKERS",
+    "value": "B5. OVERSEAS FILIPINO WORKERS"
+  },
+  {
+    "label": "B6. OTHER REMAINING WORKFORCE",
+    "value": "B6. OTHER REMAINING WORKFORCE"
+  },
+  {
+    "label": "C. REST OF THE FILIPINO POPULATION",
+    "value": "C. REST OF THE FILIPINO POPULATION"
+  }
+]

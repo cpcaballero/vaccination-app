@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Card } from "primereact/card"
-import { Calendar } from "primereact/calendar"
+
 import { InputText } from "primereact/inputtext"
 import { Button } from "primereact/button"
 import { Divider } from "primereact/divider"
@@ -8,30 +8,50 @@ import { Steps } from "primereact/steps"
 import { Dropdown } from "primereact/dropdown"
 import { Checkbox } from "primereact/checkbox"
 
+import AddressComponent from "../AddressComponent"
+import FormInput from "../FormInput"
+import basicInfoForm from "../../utils/basicInfoForm"
+import personalInfoForm from "../../utils/personalInfoForm"
+
+import { createUser } from '../../context/auth/actions'
+
+import {
+  loginUser,
+  AuthProvider,
+  useAuthState,
+  useAuthDispatch,
+} from "../../context/auth"
+
 const RegisterBox = ({ history }) => {
   const items = [
     { label: "Basic" },
     { label: "Personal" },
     { label: "Address" },
   ]
-
+  const { loading, errorMessage } = useAuthState()
+  const dispatch = useAuthDispatch()
+  const [blankFields, setBlankFields] = useState([])
   const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
     lastName: "",
     emailAddress: "",
     mobileNumber: "",
-    birthDate: null,
+    password: "",
+    confirmPassword: "",
+    birthDate: "",
     sex: "",
     civilStatus: "",
     emergencyPerson: "",
     emergencyContact: "",
+    houseBldgStreet: "",
+    region: "",
     provinceState: "",
-    country: "",
-    city: "",
+    cityMunicipality: "",
     barangay: "",
-    termsAgree: false,
-    covidClassification: ""
+    zipPostal: "",
+    // termsAgree: true,
+    covidClassification: "",
   })
 
   const {
@@ -45,91 +65,95 @@ const RegisterBox = ({ history }) => {
     civilStatus,
     emergencyContact,
     emergencyPerson,
+    houseBldgStreet,
+    region,
     provinceState,
-    country,
-    city,
+    cityMunicipality,
     barangay,
+    zipPostal,
     termsAgree,
-    covidClassification
+    covidClassification,
+    password,
+    confirmPassword
   } = formData
-
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const [activeIndex, setActiveIndex] = useState(0)
 
-  let sexOptions = [
-    { label: "MALE", value: "M" },
-    { label: "FEMALE", value: "F" },
-  ]
+  let basicFormObject = basicInfoForm({
+    firstName,
+    middleName,
+    lastName,
+    mobileNumber,
+    emailAddress,
+    password,
+    confirmPassword
+  })
 
-  let civilStatusOptions = [
-    { label: "SINGLE", value: "SINGLE" },
-    { label: "MARRIED", value: "MARRIED" },
-    { label: "WIDOW(ER)", value: "WIDOW(ER)" },
-    { label: "LEGALLY SEPARATED", value: "LEGALLY SEPARATED" },
-  ]
+  let personalFormObject = personalInfoForm({
+    birthDate,
+    sex,
+    civilStatus,
+    covidClassification,
+    emergencyContact,
+    emergencyPerson,
+  })
 
-  let countryOptions = [{ label: "PHILIPPINES", value: "PHILIPPINES" }]
+  
+  
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  
+  const handleSubmit = async () => {
+    const tempBlankFields = []
+    for (const [key, value] of Object.entries(formData)){
+      console.log("key " + key + " value " +  value)
+      if(key !== "middelName" && value === ""){ 
+        tempBlankFields.push(key)
+      }  
+    }
+    setBlankFields(tempBlankFields)
 
-  let provinceOptions = [{ label: "METRO MANILA", value: "METRO MANILA" }]
-  let cityOptions = [{ label: "QUEZON CITY", value: "QUEZON CITY" }]
-
-  let barangayOptions = [{ label: "SAUYO", value: "SAUYO" }]
-
-  let covidClassificationOptions = [
-    {
-      label: "A1. Health Care Workers",
-      value: "A1. Health Care Workers",
-    },
-    { label: "A2. Senior Citizens", value: "A2. Senior Citizens" },
-    {
-      label: "A3. Adult with Comorbidity",
-      value: "A3. Adult with Comorbidity",
-    },
-    {
-      label: "A4. Frontline Personnel in Essential Sector",
-      value: "A4. Frontline Personnel in Essential Sector",
-    },
-    { label: "A5. Poor Population", value: "A5. Poor Population" },
-    {
-      label: "B1. Teachers and Social Workers",
-      value: "B1. Teachers and Social Workers",
-    },
-    {
-      label: "B2. Other Government Workers",
-      value: "B2. Other Government Workers",
-    },
-    {
-      label: "B3. Other Essential Workers",
-      value: "B3. Other Essential Workers",
-    },
-    {
-      label: "B4. Socio-demographic groups",
-      value: "B4. Socio-demographic groups",
-    },
-    {
-      label: "B5. Overseas FIlipino Workers",
-      value: "B5. Overseas FIlipino Workers",
-    },
-    {
-      label: "B6. Other Remaining Workforce",
-      value: "B6. Other Remaining Workforce",
-    },
-    {
-      label: "C. Rest of the Filipino population",
-      value: "C. Rest of the Filipino population",
-    },
-  ]
-
-  useEffect(() => {
-    console.log(activeIndex)
-  }, [activeIndex])
+    if (tempBlankFields.length > 0 ) { 
+      return
+    }
+    else{
+      const mongoResponse = await createUser(dispatch, {...formData, src: "frontend"})
+      // const mongoResponse = await fetch('/api/v1/auth', methodOptions)
+      if(!mongoResponse.success) {
+        alert("Failed to save client ")
+      }
+      else{
+        console.log(mongoResponse)
+        const postToServer = mongoResponse.data
+        // postToServer = postToServer.data
+        console.log(postToServer)
+        delete postToServer["_id"]
+        delete postToServer["__v"]
+        let qrCode = postToServer["patientId"]
+        postToServer["qrCode"] = qrCode
+        postToServer["src"] = "frontend"
+        const serverMethodOptions = {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({...postToServer})
+        }
+        console.log(postToServer)
+        const serverResponse = await fetch('https://francophone-celsius-32987.herokuapp.com/https://bakuna.sollertiainc.com/rest/vaccinee', serverMethodOptions)  
+        history.push("/login", {
+          state: { confirmRegister: "Registration success. You may now login"}
+        })
+        // }).then(jb_respose => {
+        //   console.log(jb_respose)
+        
+      }
+    }
+  }
 
   return (
-    <>
+    <AuthProvider>
       <Card
-        title="Patient Registration"
+        title="Vaccinee Registration"
+        subTitle="All fields with asterisk (*} are required"
         className="p-col-12 p-lg-offset-4 p-lg-4"
       >
         <Steps
@@ -139,40 +163,29 @@ const RegisterBox = ({ history }) => {
           readOnly={false}
           className="p-mb-5"
         />
+        { blankFields.length > 0 && (<>
+          <small className="p-error">Complete all required fields with * to register</small><br/><br/>
+          </>
+        )}
         {activeIndex === 0 && (
           <div className="p-fluid p-grid">
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <InputText id="inputtext" />
-                <label htmlFor="inputtext">First Name</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <InputText id="inputtext" />
-                <label htmlFor="inputtext">Middle Name</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <InputText id="inputtext" />
-                <label htmlFor="inputtext">Last Name</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <InputText id="inputtext" />
-                <label htmlFor="inputtext">Email</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <InputText id="inputtext" />
-                <label htmlFor="inputtext">Mobile Number</label>
-              </span>
-            </div>
+            {basicFormObject.map((item) => (
+              <FormInput
+                {...item}
+                type={item.type}
+                nameId={item.nameId}
+                value={item.value}
+                label={item.label}
+                onChange={(e) => onChange(e)}
+                className={ (blankFields.includes(item.nameId) && item.required) ? "p-invalid" : "" }
+              />
+            ))}
+            {
+              (password !== confirmPassword && password !== "") && <small className="p-error p-d-block">Passwords do not match</small>
+            }
             <div className="p-col-12">
               <Button
+                disabled={ !(password === confirmPassword && password !== "") }
                 label="Next"
                 className="p-button-primary"
                 onClick={() => setActiveIndex(1)}
@@ -183,94 +196,17 @@ const RegisterBox = ({ history }) => {
 
         {activeIndex === 1 && (
           <div className="p-fluid p-grid">
-            <div className="p-field p-col-12 p-d-none p-d-md-block">
-              <span className="p-float-label">
-                <Calendar
-                  id="birthDate"
-                  name="birthDate"
-                  value={birthDate}
-                  onChange={(e) => onChange(e)}
-                  monthNavigator
-                  yearNavigator
-                  showIcon
-                  mask="99/99/9999"
-                  yearRange="1930:2021"
-                  showButtonBar
-                />
-                <label htmlFor="birthDate">Birthdate</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12 p-d-md-none">
-              <span className="p-float-label">
-                <Calendar
-                  id="birthDate"
-                  name="birthDate"
-                  value={birthDate}
-                  onChange={(e) => onChange(e)}
-                  monthNavigator
-                  yearNavigator
-                  showIcon
-                  mask="99/99/9999"
-                  yearRange="1930:2021"
-                  showButtonBar
-                  touchUI
-                />
-                <label htmlFor="birthDate">Birthdate</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <Dropdown
-                  id="sex"
-                  name="sex"
-                  value={sex}
-                  options={sexOptions}
-                  onChange={onChange}
-                  optionLabel="label"
-                  optionValue="value"
-                />
-                <label htmlFor="sex">Sex</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <Dropdown
-                  id="civilStatus"
-                  name="civilStatus"
-                  value={civilStatus}
-                  options={civilStatusOptions}
-                  onChange={onChange}
-                  optionLabel="label"
-                  optionValue="value"
-                />
-                <label htmlFor="civilStatus">Civil Status</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <Dropdown
-                  id="covidClassification"
-                  name="covidClassification"
-                  value={covidClassification}
-                  options={covidClassificationOptions}
-                  onChange={onChange}
-                  optionLabel="label"
-                  optionValue="value"
-                />
-                <label htmlFor="covidClassification">COVID-19 Classification</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <h5>Emergency Contact:</h5>
-              <span className="p-float-label p-mt-5">
-                <InputText id="emergencyPerson" name="emergencyPerson" />
-                <label htmlFor="emergencyPerson">Contact Person</label>
-              </span>
-              <span className="p-float-label p-mt-5">
-                <InputText id="emergencyContact" />
-                <label htmlFor="emergencyContact">Contact Number</label>
-              </span>
-            </div>
+            {personalFormObject.map((item) => (
+              <FormInput
+                {...item}
+                type={item.type}
+                nameId={item.nameId}
+                value={item.value}
+                label={item.label}
+                onChange={(e) => onChange(e)}
+                className={ (blankFields.includes(item.nameId) && item.required) ? "p-invalid" : "" }
+              />
+            ))}
             <div className="p-col-12 p-d-flex p-flex-row p-jc-between">
               <Button
                 label="Back"
@@ -290,70 +226,43 @@ const RegisterBox = ({ history }) => {
           <div className="p-fluid p-grid">
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <InputText id="houseBldgStreet" />
+                <InputText
+                  id="houseBldgStreet"
+                  name="houseBldgStreet"
+                  value={houseBldgStreet}
+                  onChange={(e) => onChange(e)}
+                  className={ blankFields.includes("houseBldgStreet") ? "p-invalid" : "" }
+                />
                 <label htmlFor="houseBldgStreet">
                   House # / Building / Street
                 </label>
               </span>
             </div>
 
+            <AddressComponent
+              formData={formData}
+              setFormData={setFormData}
+              region={region}
+              provinceState={provinceState}
+              cityMunicipality={cityMunicipality}
+              barangay={barangay}
+              blankFields={blankFields}
+            />
+
             <div className="p-field p-col-12">
               <span className="p-float-label">
-                <Dropdown
-                  id="country"
-                  name="country"
-                  value={country}
-                  options={countryOptions}
-                  onChange={onChange}
-                  optionLabel="label"
-                  optionValue="value"
+                <InputText
+                  id="zipPostal"
+                  name="zipPostal"
+                  value={zipPostal}
+                  onChange={(e) => onChange(e)}
+                  className={ blankFields.includes("zipPostal") ? "p-invalid" : "" }
                 />
-                <label htmlFor="country">Country</label>
+                <label htmlFor="zipPostal">Zip / Postal Code</label>
               </span>
             </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <Dropdown
-                  id="provinceState"
-                  name="provinceState"
-                  value={provinceState}
-                  options={provinceOptions}
-                  onChange={onChange}
-                  optionLabel="label"
-                  optionValue="value"
-                />
-                <label htmlFor="provinceState">Province/State</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <Dropdown
-                  id="city"
-                  name="city"
-                  value={city}
-                  options={cityOptions}
-                  onChange={onChange}
-                  optionLabel="label"
-                  optionValue="value"
-                />
-                <label htmlFor="city">City</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
-              <span className="p-float-label">
-                <Dropdown
-                  id="barangay"
-                  name="barangay"
-                  value={barangay}
-                  options={barangayOptions}
-                  onChange={onChange}
-                  optionLabel="label"
-                  optionValue="value"
-                />
-                <label htmlFor="barangay">Barangay</label>
-              </span>
-            </div>
-            <div className="p-field p-col-12">
+
+            {/* <div className="p-field p-col-12">
               <div className="p-field-checkbox">
                 <Checkbox
                   inputId="termsAgree"
@@ -364,10 +273,14 @@ const RegisterBox = ({ history }) => {
                   }
                 />
                 <label htmlFor="termsAgree">
-                  Click the checkbox to agree to our Terms &amp; Conditions
+                  Click the checkbox to agree to our{" "}
+                  <span onClick={() => alert("test")}>
+                    {" "}
+                    Terms &amp; Conditions
+                  </span>
                 </label>
               </div>
-            </div>
+            </div> */}
             <div className="p-col-12 p-d-flex p-flex-row p-jc-between">
               <Button
                 label="Back"
@@ -377,14 +290,14 @@ const RegisterBox = ({ history }) => {
               <Button
                 label="Submit"
                 className="p-mx-2 p-button-primary"
-                onClick={() => console.log("submit")}
+                onClick={() => handleSubmit()}
               />
             </div>
           </div>
         )}
 
         <Divider />
-        <div className="p-d-flex p-jc-center p-flex-column">
+        <div className="p-d-flex p-ai-center p-flex-column">
           <h3 className="p-text-center">Already have an account?</h3>
           <Button
             label="Click here to Login"
@@ -393,7 +306,7 @@ const RegisterBox = ({ history }) => {
           />
         </div>
       </Card>
-    </>
+    </AuthProvider>
   )
 }
 

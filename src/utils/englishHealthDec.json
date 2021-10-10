@@ -1,0 +1,122 @@
+[
+  {
+    "text": "Have you or any family member/s have been diagnosed with or tested positive for COVID-19 in the past three (3) months?",
+    "isHeading": false,
+    "isIndented": false
+  },
+  {
+    "text": "Do you or did you have the following symptoms in the past 14 days:",
+    "isHeading": true,
+    "isIndented": false
+  },
+  {
+    "text": "Fever of greater than 37 degrees?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Do you have any flu-like symptom such as cough or chills in the past 14 days?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Do you experience shortness of breath or breathing difficulty?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Headache, muscle, or body ache?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Are you experiencing diarrhea?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Do you have any allergy to food, antibiotics, or any medicine?",
+    "isHeading": false,
+    "isIndented": false
+  },
+  {
+    "text": "Have you ever had a severe reaction to vaccines in the past?",
+    "isHeading": false,
+    "isIndented": false
+  },
+  {
+    "text": "Have you received any vaccine in the last 14 days?",
+    "isHeading": false,
+    "isIndented": false
+  },
+  {
+    "text": "For women:",
+    "isHeading": true,
+    "isIndented": false
+  },
+  {
+    "text": "Are you pregnant?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "For women who are pregnant, are you in your 1st to 2nd trimester (1 to 6 months) of pregnancy?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Plans to get pregnant in the next 6 months?",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Do you have a bleeding disorder or are you taking a blood thinner? (Example of Bleeding disorder: Hemophilia, Thalassemia) (Example of blood thinning medications: Aspirin, Clopidogrel, Warfarin, Cilostazol)",
+    "isHeading": false,
+    "isIndented": false
+  },
+  {
+    "text": "Do you have any of the following illness/disease?",
+    "isHeading": true,
+    "isIndented": false
+  },
+  {
+    "text": "Autoimmune disease",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "HIV Diagnosis",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Cancer/Malignancy",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Transplant Patient",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Under steroid treatment",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Bed ridden, terminal illness, less than 6mos prognosis",
+    "isHeading": false,
+    "isIndented": true
+  },
+  {
+    "text": "Are you bedridden?",
+    "isHeading": false,
+    "isIndented": false
+  },
+  {
+    "text": "Are you wheelchair bound?",
+    "isHeading": false,
+    "isIndented": false
+  }
+]

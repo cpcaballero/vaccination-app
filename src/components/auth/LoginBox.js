@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Card } from "primereact/card"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
 import { Button } from "primereact/button"
 import { Divider } from "primereact/divider"
-
+import { Message } from 'primereact/message';
+import { useLocation } from 'react-router-dom/'
 import {
   loginUser,
   AuthProvider,
@@ -13,35 +14,40 @@ import {
 } from "../../context/auth"
 
 const LoginBox = ({ history }) => {
-  const { loading, errorMessage } = useAuthState()
+  const location = useLocation()
+  const { loading, errorMessage, user, token } = useAuthState()
+  const usernameInput = useRef(null);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   })
 
+  
   const { username, password } = formData
   const dispatch = useAuthDispatch()
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value })
   
   const handleLogin = async (e) => {
-    console.log("HERE WITHOUT ERROR")
     console.log(loading)
     try {
-      let response = await loginUser(dispatch, { username, password })
-      console.log(response)
-      if (!response) {
-        return
-      }
-      console.log(loading)
-      history.push("/dashboard/profile")
+      let response = await loginUser(dispatch, { username, password })  
     } catch (error) {
       console.log(error)
     }
   }
 
+
+  useEffect( () => {
+    // if(location.state){
+    //   alert(location.state.state.confirmRegister)
+    // }
+    usernameInput.current.focus()
+    
+  }, [])
+
   return (
-    <AuthProvider>
+    
       <Card title="Login" className="p-col-12 p-lg-offset-4 p-lg-4">
         <div className="p-fluid p-grid">
           <div className="p-field p-col-12">
@@ -51,6 +57,7 @@ const LoginBox = ({ history }) => {
                 name="username"
                 value={username}
                 onChange={(e) => onChange(e)}
+                ref={usernameInput}
               />
               <label htmlFor="username">Email</label>
             </span>
@@ -68,7 +75,7 @@ const LoginBox = ({ history }) => {
               <label htmlFor="password">Password</label>
             </span>
           </div>
-          <div className="p-md-4">
+          <div className="p-sm-12">
             <Button label="Forgot Password?" className="p-button-link" />
           </div>
           <div className="p-col-12">
@@ -89,18 +96,18 @@ const LoginBox = ({ history }) => {
             )}
           </div>
         </div>
+        { errorMessage && (<Message severity="error" text={errorMessage}/>) }
         <Divider />
-        <div className="p-d-flex p-jc-center p-flex-column">
+        <div className="p-d-flex p-ai-center p-flex-column">
           <h3 className="p-text-center">Don't have an account?</h3>
           <Button
             label="Click here to register"
             className="p-button-link"
             onClick={() => history.push("/register")}
           />
-        </div>
-        {errorMessage}
+        </div> 
       </Card>
-    </AuthProvider>
+    
   )
 }
 

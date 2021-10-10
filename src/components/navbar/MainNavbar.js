@@ -2,9 +2,6 @@ import React from "react"
 import { QRCode } from "qrcode.react"
 import { Button } from "primereact/button"
 import {
-  loginUser,
-  AuthProvider,
-  useAuthState,
   useAuthDispatch,
   logout,
 } from "../../context/auth"
@@ -16,7 +13,6 @@ const MainNavbar = ({
   navLinks,
   setQRCodeVisible
 }) => {
-  const { loading, errorMessage } = useAuthState()
   const dispatch = useAuthDispatch()
   const logoutAccount = async () => {
     try {
@@ -25,7 +21,6 @@ const MainNavbar = ({
       if (!response) {
         return
       }
-      console.log(loading)
       history.push("/login")
     } catch (error) {
       console.log(error)
@@ -39,7 +34,16 @@ const MainNavbar = ({
           className="p-button-text p-button-plain p-button-lg p-d-lg-none p-d-inline-flex"
           onClick={() => toggleSidebarVisible(true)}
         />
-        <h1 className="p-mx-3">App Logo Here</h1>
+        <img
+          src={process.env.PUBLIC_URL + "/mylogo.png"}
+          alt="test"
+          style={{
+            width: "80px",
+            height: "80px",
+            textAlign: "center"
+          }}
+        />
+        <h1 className="p-mx-3">Vaccine App</h1>
         <div className="buttonset p-d-none p-d-lg-flex p-ai-center ">
           {navLinks.map((item) => (
             <Button

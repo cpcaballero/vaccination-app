@@ -2,8 +2,14 @@ import React from "react"
 import { Dialog } from "primereact/dialog"
 import QRCode from "qrcode.react"
 
-const QRCodeModal = ({ isVisible, setQRCodeVisible }) => {
-  console.log(isVisible)
+const QRCodeModal = ({ isVisible, setQRCodeVisible, userDetails, dispatch }) => {
+  const {
+    patientId,
+    firstName,
+    middleName,
+    lastName
+  } = userDetails.user
+  // console.log(userDetails)
   return (
     <Dialog
       visible={isVisible}
@@ -11,9 +17,16 @@ const QRCodeModal = ({ isVisible, setQRCodeVisible }) => {
       header="Your QR Code for Scanning"
     >
       <div className="p-d-flex p-flex-column p-jc-center p-ai-center">
-        <QRCode value="A193-3BCD-519C-F00D" className="p-as-center p-text-center" size={256} includeMargin={false} />
-        <h4>Juan Miguel Marquez Barera</h4>
-        <small>ID No: A193-3BCD-519C-F00D</small>
+        <QRCode
+          value={patientId}
+          className="p-as-center p-text-center"
+          size={256}
+          includeMargin={false}
+        />
+        <h4>
+          {firstName} {middleName} {lastName}
+        </h4>
+        <small>ID No: {patientId}</small>
       </div>
     </Dialog>
   )

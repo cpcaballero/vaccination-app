@@ -10,7 +10,8 @@ const MainSidebar = ({
   toggleSidebarVisible,
   history,
   navLinks,
-  setQRCodeVisible
+  setQRCodeVisible,
+  userDetails
 }) => {
   let viewQRCode = false
   const customIcon = () => {
@@ -32,11 +33,20 @@ const MainSidebar = ({
       onHide={() => toggleSidebarVisible(false)}
       icons={ () => customIcon()}
     >
-      <h1 className="">App Logo Here</h1>
+      <img
+        src={process.env.PUBLIC_URL + "/mylogo.png"}
+        alt="test"
+        style={{
+          width: "80px",
+          height: "80px",
+          textAlign: "center"
+        }}
+      />
+      <h1 className="">Vaccine App</h1>
       <div className="p-d-flex p-jc-start p-flex-column">
         <div className="p-d-flex p-flex-row p-jc-start p-ai-center">
         <Avatar icon="pi pi-user" className="p-mr-2" size="xlarge" shape="circle" />
-        <h4>Juan Miguel Morales Marquez </h4>
+        <h4>{userDetails.user.firstName} {userDetails.user.middleName} {userDetails.user.lastName} </h4>
         </div>
         <Button
           icon="pi pi-th-large"
