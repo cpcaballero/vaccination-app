@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from "primereact/button"
@@ -16,6 +16,7 @@ import { Divider } from 'primereact/divider';
 import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
 import { Badge } from 'primereact/badge';
+import { Steps } from "primereact/steps"
 
 import  Booking  from './Booking'
 
@@ -24,6 +25,11 @@ const Dependents = () => {
   const [editMode, setEditMode] = useState(true)
   const [modalView, toggleModalView] = useState(false)
   const [dependentModal, toggleDependentModal] = useState(false)
+  const items = [
+    { label: "Basic" },
+    { label: "Personal" },
+    { label: "Address" },
+  ]
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -69,6 +75,7 @@ const Dependents = () => {
     height,
   } = formData 
 
+  const [activeIndex, setActiveIndex] = useState(0)
 
   let basicFormObject = basicInfoForm({
     firstName,
@@ -88,12 +95,17 @@ const Dependents = () => {
   })
 
   const [dependentScheduleModal, toggleDependentScheduleModal] = useState(false)
-const [dependentBooking, toggleDependentBooking] = useState(false)
+  const [dependentBooking, toggleDependentBooking] = useState(false)
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const createBooking = () => "/dashboard/schedules/book"
+
+  useEffect( () => {
+    setActiveIndex(0);
+  }, [modalView]);
+
   return (
     <div>
       <h2>Dependents</h2>
@@ -120,31 +132,50 @@ const [dependentBooking, toggleDependentBooking] = useState(false)
       <Dialog
         visible={modalView}
         onHide={() => toggleModalView(false)}
+        resizable={false}
+        draggable={false}
         header="Add New Dependent"
+        style={{width: '30vw'}}
+        contentStyle={{maxHeight: '100%'}}
+        breakpoints={{'1200px': '75vw', '768px': '100vw'}}
       >
-        <div className=" p-lg-6 p-lg-offset-3">
-          <Fieldset className="p-mt-3" legend="Basic">
-            <div className="p-fluid p-grid p-mt-3">
-              {basicFormObject.map((item) => (
-                <FormInput
-                  {...item}
-                  type={item.type}
-                  nameId={item.nameId}
-                  value={item.value}
-                  label={item.label}
-                  onChange={(e) => onChange(e)}
-                  className={
-                    blankFields.includes(item.nameId) && item.required
-                      ? "p-invalid"
-                      : ""
-                  }
-                  disabled={!editMode}
-                />
-              ))}
-            </div>
-          </Fieldset>
-          <Fieldset className="p-mt-3" legend="Personal">
-            <div className="p-fluid p-grid p-mt-3">
+        <Steps
+          model={items}
+          activeIndex={activeIndex}
+          onSelect={(e) => setActiveIndex(e.index)}
+          readOnly={false}
+          className="p-mb-5"
+        />
+        { blankFields.length > 0 && (<>
+          <small className="p-error">Complete all required fields with * to register</small><br/><br/>
+          </>
+        )}
+        <div className=" p-lg-12">
+          {activeIndex === 0 && (
+            
+              <div className="p-fluid p-grid ">
+                {basicFormObject.map((item) => (
+                  <FormInput
+                    {...item}
+                    type={item.type}
+                    nameId={item.nameId}
+                    value={item.value}
+                    label={item.label}
+                    onChange={(e) => onChange(e)}
+                    className={
+                      blankFields.includes(item.nameId) && item.required
+                        ? "p-invalid"
+                        : ""
+                    }
+                    disabled={!editMode}
+                  />
+                ))}
+              </div>
+            
+          )}
+          {activeIndex === 1 && (
+          
+            <div className="p-fluid p-grid ">
               {personalFormObject.map((item) => (
                 <FormInput
                   {...item}
@@ -162,9 +193,10 @@ const [dependentBooking, toggleDependentBooking] = useState(false)
                 />
               ))}
             </div>
-          </Fieldset>
-          <Fieldset className="p-mt-3" legend="Address">
-            <div className="p-fluid p-grid p-mt-3">
+          )}
+          {activeIndex === 2 && (
+          
+            <div className="p-fluid p-grid ">
               <div className="p-field p-col-12">
                 <span className="p-float-label">
                   <InputText
@@ -210,8 +242,8 @@ const [dependentBooking, toggleDependentBooking] = useState(false)
                 </span>
               </div>
             </div>
-          </Fieldset>
-          <Fieldset className="p-mt-3" legend="Medical">
+          )}
+          {/* <Fieldset className="p-mt-3" legend="Medical">
             <div className="p-fluid p-grid p-mt-3">
               <div className="p-field p-col">
                 <div className="p-inputgroup">
@@ -232,7 +264,7 @@ const [dependentBooking, toggleDependentBooking] = useState(false)
                 </div>
               </div>
             </div>
-          </Fieldset>
+          </Fieldset> */}
           {editMode && (
             <div className="p-d-flex p-flex-column p-ai-stretch">
               <Button

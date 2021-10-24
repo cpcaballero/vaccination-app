@@ -21,6 +21,7 @@ const Schedules = ({history}) => {
   const  doses = user.doses !== null ? [...user.doses] : [];
   const createBooking = () => history.push("/dashboard/schedules/book")
 
+  
   useEffect(() => {
     getLocations(dispatch)
     getSchedules(dispatch)
