@@ -33,6 +33,31 @@ export const createUser = async (dispatch, formData) => {
   }
 }
 
+export const insertDependent = async (dispatch, formData) => {
+  let res = null
+  try{
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    res = await axios.post(`/api/v1/auth/insert-dependent`, formData, config)
+    console.log(res)
+    if (res.data.success) {
+      return {
+        success: true,
+        data: res.data.user,
+      }
+    } else {
+      return {
+        success: false,
+      }
+    }
+  } catch(err) {
+
+  }
+}
+
 export const loginUser = async (dispatch, payload) => {
   const requestOptions = {
     headers: { "Content-Type": "application/json" },
@@ -75,7 +100,11 @@ export const loadUser = async (dispatch) => {
       })
     } catch (error) {
       console.table(error.response.data)
-      dispatch({ type: "LOGIN_ERROR", error: error.response.data.msg })
+      if(error.response.data.msg.name === "TokenExpiredError"){
+        dispatch({ type: "LOGIN_ERROR", error: "Session expired. Please log in" });
+      } else{
+        dispatch({ type: "LOGIN_ERROR", error: error.response.data.msg.message });
+      }
       // dispatch({ type: "LOGIN_ERROR", error: error })
       // dispatch({ type: "LOGOUT" })
     }

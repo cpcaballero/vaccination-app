@@ -15,7 +15,7 @@ const Landing = ({ match, history }) => {
       history.push("/dashboard/profile")
     }
     
-  }, [userDetails])
+  }, [userDetails, history])
 
 
   return (

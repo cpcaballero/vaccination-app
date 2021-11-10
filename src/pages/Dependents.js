@@ -19,12 +19,19 @@ import { Badge } from 'primereact/badge';
 import { Steps } from "primereact/steps"
 
 import  Booking  from './Booking'
+import { useAuthDispatch, useAuthState } from "../context/auth";
+import { createUser, insertDependent } from '../context/auth/actions';
+
 
 const Dependents = () => {
   const [blankFields, setBlankFields] = useState([])
   const [editMode, setEditMode] = useState(true)
   const [modalView, toggleModalView] = useState(false)
+  const { user } = useAuthState();
   const [dependentModal, toggleDependentModal] = useState(false)
+  const dispatch = useAuthDispatch();
+  
+
   const items = [
     { label: "Basic" },
     { label: "Personal" },
@@ -103,8 +110,69 @@ const Dependents = () => {
   const createBooking = () => "/dashboard/schedules/book"
 
   useEffect( () => {
+    setFormData((prevData) => {
+      return { ...prevData, 
+        "mobileNumber": user.mobileNumber, 
+        "emailAddress": user.emailAddress,
+        "emergencyContact": user.mobileNumber,
+        "emergencyPerson": `${user.firstName} ${user.middleName[0]}. ${user.lastName}` 
+      }
+    })
     setActiveIndex(0);
-  }, [modalView]);
+
+  }, [user]);
+
+  const handleSubmitDependent = async () => {
+    const tempBlankFields = []
+    for (const [key, value] of Object.entries(formData)){
+      console.log("key " + key + " value " +  value)
+      if(key !== "middelName" && value === ""){ 
+        tempBlankFields.push(key)
+      }  
+    }
+    setBlankFields(tempBlankFields)
+
+    if (tempBlankFields.length > 0 ) { 
+      return
+    }
+    else{
+      const mongoResponse = await createUser(dispatch, {...formData, src: "frontend"})
+      // const mongoResponse = await fetch('/api/v1/auth', methodOptions)
+      if(!mongoResponse.success) {
+        alert("Failed to save client ")
+      }
+      else{
+        console.log(mongoResponse)
+        const postToServer = mongoResponse.data
+        await insertDependent(dispatch, {userId: user._id, dependentId: postToServer._id})
+        
+        // postToServer = postToServer.data
+        console.log(postToServer)
+        delete postToServer["_id"]
+        delete postToServer["__v"]
+        let qrCode = postToServer["patientId"]
+        postToServer["qrCode"] = qrCode
+        postToServer["src"] = "frontend"
+        const serverMethodOptions = {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({...postToServer})
+        }
+        console.log(postToServer)
+        const serverResponse = await fetch('https://francophone-celsius-32987.herokuapp.com/https://bakuna.sollertiainc.com/rest/vaccinee', serverMethodOptions)  
+        
+        
+        // history.push("/login", {
+        //   state: { confirmRegister: "Registration success. You may now login"}
+        // })
+        // }).then(jb_respose => {
+        //   console.log(jb_respose)
+        
+      }
+    }
+  }
+
+
 
   return (
     <div>
@@ -151,10 +219,10 @@ const Dependents = () => {
           </>
         )}
         <div className=" p-lg-12">
-          {activeIndex === 0 && (
-            
-              <div className="p-fluid p-grid ">
-                {basicFormObject.map((item) => (
+          {activeIndex === 0 && (  
+            <div className="p-fluid p-grid ">
+              {basicFormObject.map((item) => (
+                <>
                   <FormInput
                     {...item}
                     type={item.type}
@@ -168,9 +236,23 @@ const Dependents = () => {
                         : ""
                     }
                     disabled={!editMode}
+                    helpText={
+                      ["mobileNumber", "emailAddress"].includes(item.nameId)  
+                        ? "You may leave account holder's info as default value" 
+                        : "" 
+                    }
                   />
-                ))}
+                </>
+                
+              ))}
+              <div className="p-col-12">
+                <Button
+                  label="Next"
+                  className="p-button-primary"
+                  onClick={() => setActiveIndex(1)}
+                />
               </div>
+            </div>
             
           )}
           {activeIndex === 1 && (
@@ -190,8 +272,25 @@ const Dependents = () => {
                       : ""
                   }
                   disabled={!editMode}
+                  helpText={
+                    ["emergencyPerson", "emergencyContact"].includes(item.nameId)  
+                      ? "You may leave account holder's info as default value" 
+                      : ""
+                  }
                 />
               ))}
+              <div className="p-col-12 p-d-flex p-flex-row p-jc-between">
+                <Button
+                  label="Back"
+                  className="p-mx-2 p-button-outlined p-button-secondary"
+                  onClick={() => setActiveIndex(0)}
+                />
+                <Button
+                  label="Next"
+                  className="p-mx-2 p-button-primary"
+                  onClick={() => setActiveIndex(2)}
+                />
+              </div>
             </div>
           )}
           {activeIndex === 2 && (
@@ -241,38 +340,19 @@ const Dependents = () => {
                   <label htmlFor="zipPostal">Zip / Postal Code</label>
                 </span>
               </div>
-            </div>
-          )}
-          {/* <Fieldset className="p-mt-3" legend="Medical">
-            <div className="p-fluid p-grid p-mt-3">
-              <div className="p-field p-col">
-                <div className="p-inputgroup">
-                  <span className="p-float-label">
-                    <InputText disabled={!editMode} id="inputtext" value="0" />
-                    <span className="p-inputgroup-addon">kg</span>
-                    <label htmlFor="inputtext">Weight (kg)</label>
-                  </span>
-                </div>
+
+              <div className="p-col-12 p-d-flex p-flex-row p-jc-between">
+                <Button
+                  label="Back"
+                  className="p-mx-2 p-button-outlined p-button-secondary"
+                  onClick={() => setActiveIndex(1)}
+                />
+                <Button
+                  label="Submit"
+                  className="p-mx-2 p-button-primary"
+                  onClick={() => handleSubmitDependent()}
+                />
               </div>
-              <div className="p-field p-col">
-                <div className="p-inputgroup">
-                  <span className="p-float-label">
-                    <InputText disabled={!editMode} id="inputtext" value="0" />
-                    <span className="p-inputgroup-addon">cm</span>
-                    <label htmlFor="inputtext">Height (cm)</label>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Fieldset> */}
-          {editMode && (
-            <div className="p-d-flex p-flex-column p-ai-stretch">
-              <Button
-                label="Save"
-                icon="pi pi-save"
-                className="p-my-3 p-button-lg p-button-primary"
-                onClick={() => setEditMode(!editMode)}
-              />
             </div>
           )}
         </div>
@@ -363,11 +443,11 @@ const Dependents = () => {
 
 
     <Dialog
-        visible={dependentBooking}
-        style={{width: '100vw'}}
-        onHide={() => toggleDependentBooking(false)}
-        header="Add Dependent Vaccination Booking"
-      >
+      visible={dependentBooking}
+      style={{width: '100vw'}}
+      onHide={() => toggleDependentBooking(false)}
+      header="Add Dependent Vaccination Booking"
+    >
         
         
       <Booking />

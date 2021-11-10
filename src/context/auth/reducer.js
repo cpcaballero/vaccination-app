@@ -41,7 +41,7 @@ export const AuthReducer = (state = initialState, action) => {
       console.log("USER_LOADED PAYLOAD")
       console.log(payload)
       return { 
-        ... state,
+        ...state,
         user: payload.user,
         token: localStorage.getItem("token"),
         loading: false,
@@ -92,7 +92,7 @@ export const AuthReducer = (state = initialState, action) => {
     /** LOCATION CASES */
     case "LOCATION_LOADING":
       return {
-        ... state,
+        ...state,
         locationLoading: true
       }
     case "LOCATION_LOADED":
@@ -110,7 +110,7 @@ export const AuthReducer = (state = initialState, action) => {
     /** SCHEDULE CASES */
     case "SCHEDULE_LOADING":
       return {
-        ... state,
+        ...state,
         scheduleLoading: true
       }
     case "SCHEDULE_LOADED":
@@ -128,7 +128,7 @@ export const AuthReducer = (state = initialState, action) => {
     /** BOOKING CASES */
     case "BOOKING_LOADING":
       return {
-        ... state,
+        ...state,
         bookingLoading: true
       }
     case "BOOKING_LOADED":

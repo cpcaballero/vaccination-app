@@ -23,7 +23,7 @@ const Profile = () => {
   useEffect(() => {
     console.log("useeffect getvaccinee")
     getVaccinee(dispatch)
-  }, [])
+  }, [dispatch])
 
   const [formData, setFormData] = useState({
     firstName: "",

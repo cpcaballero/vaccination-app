@@ -1,0 +1,28 @@
+FROM node:15-alpine
+
+RUN apk add --update \
+    bash \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+  && pip install virtualenv \
+  && rm -rf /var/cache/apk/*
+
+RUN mkdir -p /home/app
+WORKDIR /home/app
+
+COPY package.json /home/app
+RUN rm -rf /home/app/node_modules
+RUN npm install -g npm@7.11.1
+RUN npm install --save-dev @babel/core
+#RUN npx npm-check-updates -u
+RUN npm install
+
+
+COPY . /home/app
+EXPOSE 3000
+
+ENV NODE_OPTIONS=--max-old-space-size=4096
+
+CMD npm run start

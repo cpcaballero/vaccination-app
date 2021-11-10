@@ -31,7 +31,7 @@ const LoginBox = ({ history }) => {
   const handleLogin = async (e) => {
     console.log(loading)
     try {
-      let response = await loginUser(dispatch, { username, password })  
+      await loginUser(dispatch, { username, password })  
     } catch (error) {
       console.log(error)
     }
@@ -39,11 +39,7 @@ const LoginBox = ({ history }) => {
 
 
   useEffect( () => {
-    // if(location.state){
-    //   alert(location.state.state.confirmRegister)
-    // }
     usernameInput.current.focus()
-    
   }, [])
 
   return (

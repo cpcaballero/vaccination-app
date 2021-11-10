@@ -1,6 +1,5 @@
 import React from "react"
 import { Dropdown } from "primereact/dropdown"
-import { Checkbox } from "primereact/checkbox"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
 import { Calendar } from "primereact/calendar"
@@ -13,6 +12,7 @@ const FormInput = ({
   nameId,
   value,
   required,
+  helpText = "",
   ...rest
 }) => {
   switch (type) {
@@ -29,9 +29,16 @@ const FormInput = ({
             />
             <label htmlFor={nameId}>{required  && "*"}{label}</label>
           </span>
+          {
+            helpText !== "" &&
+              (
+                <small>
+                  { helpText }
+                </small>
+              )
+          }
         </div>
       )
-      break
     case "password":
       return (
         <div className="p-field p-col-12">
@@ -49,7 +56,6 @@ const FormInput = ({
           </span>
         </div>
       )
-      break
     case "date":
       console.log(value)
       return (
@@ -93,7 +99,6 @@ const FormInput = ({
           </div>
         </>
       )
-      break
     case "dropdown":
       return (
         <>
@@ -113,6 +118,7 @@ const FormInput = ({
           </div>
         </>
       )
+    default: return(<></>)
   }
 }
 
