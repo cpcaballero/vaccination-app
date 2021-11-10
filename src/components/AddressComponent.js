@@ -27,19 +27,24 @@ const AddressComponent = ({
   useEffect(() => {
     (async () => {
       setLoadingBar({ ...loadingBar, region: true })
-      let regions = await fetch("https://bakuna.sollertiainc.com/rest/regions")
-      regions = await regions.json()
+      let regions = await fetch("https://bakuna.sollertiainc.com/rest/regions").catch(error => [])
       console.log(regions)
-      setRegionOptions(
-        regions.items
-          .map((item) => {
-            return {
-              label: unescape(encodeURIComponent(item.description)),
-              value: item.id.toString(),
-            }
-          })
-          .sort((a, b) => (a.label > b.label ? 1 : -1))
-      )
+      
+      regions = regions.length > 0 ? await regions.json() : [] 
+      if(regions.length > 0){
+        setRegionOptions(
+          regions?.items
+            .map((item) => {
+              return {
+                label: unescape(encodeURIComponent(item.description)),
+                value: item.id.toString(),
+              }
+            })
+            .sort((a, b) => (a.label > b.label ? 1 : -1))
+        )
+      } else {
+        setRegionOptions([])
+      }
     })()
   }, [])
 
@@ -55,21 +60,25 @@ const AddressComponent = ({
         setLoadingBar({ ...loadingBar, provinceState: true })
         let provinces = await fetch(
           `https://bakuna.sollertiainc.com/rest/provinces?rid=${region}`
-        )
-        provinces = await provinces.json()
+        ).catch(error => [])
+        provinces = provinces.length > 0 ? await provinces.json() : []
 
-        setProvinceStateOptions(
-          provinces.items
-            .map((item) => {
-              return {
-                label: unescape(
-                  encodeURIComponent(item.description.replace(/_/g, " "))
-                ),
-                value: item.id.toString(),
-              }
-            })
-            .sort((a, b) => (a.label > b.label ? 1 : -1))
-        )
+        if(provinces.length > 0){
+          setProvinceStateOptions(
+            provinces.items
+              .map((item) => {
+                return {
+                  label: unescape(
+                    encodeURIComponent(item.description.replace(/_/g, " "))
+                  ),
+                  value: item.id.toString(),
+                }
+              })
+              .sort((a, b) => (a.label > b.label ? 1 : -1))
+          )
+        } else {
+          setProvinceStateOptions([])
+        }
       }
     })()
   }, [region])
@@ -81,7 +90,7 @@ const AddressComponent = ({
   }, [provinceStateOptions])
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (provinceState !== "") {
         setLoadingBar({ ...loadingBar, cityMunicipality: true })
         let cities = await fetch(

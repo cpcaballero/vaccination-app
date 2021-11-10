@@ -38,11 +38,11 @@ const Profile = () => {
     emergencyContact: "",
     emergencyPerson: "",
     houseBldgStreet: "",
-    barangay: "",
-    cityMunicipality: "",
-    provinceState: "",
+    // barangay: "",
+    // cityMunicipality: "",
+    // provinceState: "",
     zipPostal: "",
-    region: "",
+    // region: "",
     weight: "",
     height: "",
   })
@@ -60,11 +60,11 @@ const Profile = () => {
     emergencyContact,
     emergencyPerson,
     houseBldgStreet,
-    barangay,
-    cityMunicipality,
-    provinceState,
+    // barangay,
+    // cityMunicipality,
+    // provinceState,
     zipPostal,
-    region,
+    // region,
     weight,
     height,
   } = formData
@@ -174,7 +174,7 @@ const Profile = () => {
               </span>
             </div>
 
-            <AddressComponent
+            {/* <AddressComponent
               formData={formData}
               setFormData={setFormData}
               region={region}
@@ -183,7 +183,7 @@ const Profile = () => {
               barangay={barangay}
               blankFields={blankFields}
               disabled={!editMode}
-            />
+            /> */}
 
             <div className="p-field p-col-12">
               <span className="p-float-label">

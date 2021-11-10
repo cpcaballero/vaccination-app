@@ -45,10 +45,10 @@ const RegisterBox = ({ history }) => {
     emergencyPerson: "",
     emergencyContact: "",
     houseBldgStreet: "",
-    region: "",
-    provinceState: "",
-    cityMunicipality: "",
-    barangay: "",
+    // region: "",
+    // provinceState: "",
+    // cityMunicipality: "",
+    // barangay: "",
     zipPostal: "",
     // termsAgree: true,
     covidClassification: "",
@@ -66,12 +66,12 @@ const RegisterBox = ({ history }) => {
     emergencyContact,
     emergencyPerson,
     houseBldgStreet,
-    region,
-    provinceState,
-    cityMunicipality,
-    barangay,
+    // region,
+    // provinceState,
+    // cityMunicipality,
+    // barangay,
     zipPostal,
-    termsAgree,
+    // termsAgree,
     covidClassification,
     password,
     confirmPassword
@@ -239,7 +239,7 @@ const RegisterBox = ({ history }) => {
               </span>
             </div>
 
-            <AddressComponent
+            {/* <AddressComponent
               formData={formData}
               setFormData={setFormData}
               region={region}
@@ -247,7 +247,7 @@ const RegisterBox = ({ history }) => {
               cityMunicipality={cityMunicipality}
               barangay={barangay}
               blankFields={blankFields}
-            />
+            /> */}
 
             <div className="p-field p-col-12">
               <span className="p-float-label">

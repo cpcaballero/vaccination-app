@@ -65,6 +65,7 @@ export const loginUser = async (dispatch, payload) => {
 
   try {
     console.log("inside try login_user")
+    console.log(payload)
     dispatch({ type: "REQUEST_LOGIN" })
     const response = await axios.post(
       `/api/v1/auth/login`,
