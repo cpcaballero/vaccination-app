@@ -27,8 +27,10 @@ jobs:
           ls
       - id: checkout
         name: github checkout
-      - uses: actions/checkout@v2
-      - run: |
+        uses: actions/checkout@v2
+      - id: git_push
+        name: github push file
+        run: |
           ls
           git config user.name cpcaballero
           git config user.email carlospcaballero@outlook.com
