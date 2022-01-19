@@ -22,7 +22,7 @@ jobs:
         run: echo "::set-output name=test::df -h | grep '0%'"
       - id: randomemail
         name: Create a file
-        run: echo "hello world!" > email.txt
+        run: echo "hello world!" > mail.txt
       - id: step2
         name: Test email
         run: curl --ssl-reqd --url 'smtps://smtp.gmail.com:465'  --user 'carlos.pelimer.caballero@gmail.com:Minato20' --mail-from 'carlos.pelimer.caballero@gmail.com' --mail-rcpt 'carlospcaballero@outlook.com'  --upload-file mail.txt
