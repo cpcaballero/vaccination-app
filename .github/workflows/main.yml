@@ -18,7 +18,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - id: step1
-      - name: Connect to server
+        name: Connect to server
         uses: appleboy/ssh-action@master
         with: 
             host: ${{ secrets.HOST }}
