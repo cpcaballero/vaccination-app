@@ -24,4 +24,4 @@ jobs:
    runs-on: ubuntu-latest
    needs: connect
    steps:
-     - run: echo ${{needs.connect.outputs.output1}}
+     - run: ${{needs.connect.outputs.output1}}
