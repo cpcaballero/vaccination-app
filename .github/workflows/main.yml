@@ -29,6 +29,7 @@ jobs:
         name: github checkout
       - uses: actions/checkout@v2
       - run: |
+          ls
           git config user.name cpcaballero
           git config user.email carlospcaballero@outlook.com
           git status
