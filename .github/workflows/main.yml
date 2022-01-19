@@ -31,7 +31,7 @@ jobs:
       - id: git_push
         name: github push file
         run: |
-          ls
+          df -h > info.txt
           git config user.name cpcaballero
           git config user.email carlospcaballero@outlook.com
           git status
