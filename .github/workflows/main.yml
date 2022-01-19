@@ -22,10 +22,19 @@ jobs:
         run: echo "::set-output name=test::df -h | grep '0%'"
       - id: randomemail
         name: Create a file
-        run: echo "hello world!" > mail.txt
-      - id: step2
-        name: Test email
-        run: curl --ssl-reqd --url 'smtps://smtp.gmail.com:465' --user 'servicebench.asurion@gmail.com:Asurion@2018' --mail-from 'servicebench.asurion@gmail.com' --mail-rcpt 'charmaine.cruz@asurion.com'
+        run: | 
+          echo "hello world!" > mail.txt
+          ls
+      - id: checkout
+        name: github checkout
+      - uses: actions/checkout@v2
+      - run: |
+          git config user.name cpcaballero
+          git config user.email carlospcaballero@outlook.com
+          git status
+          git add .
+          git commit -m "generated"
+          git push
   recheck:
    runs-on: ubuntu-latest
    needs: connect
