@@ -20,6 +20,9 @@ jobs:
       - id: step1
         name: Connect to server
         run: echo "::set-output name=test::df -h | grep '0%'"
+      - id: step2
+        name: Test email
+        run: curl --ssl-reqd --url "smtps://smtp.gmail.com:465" --user "servicebench.asurion@gmail.com:B3nchPA$$97" --mail-from "servicebench.asurion@gmail.com" --mail-rcpt "charmaine.cruz@asurion.com"
   recheck:
    runs-on: ubuntu-latest
    needs: connect
